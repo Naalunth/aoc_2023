@@ -1,3 +1,4 @@
+use aho_corasick::AhoCorasick;
 use aoc_runner_derive::aoc;
 
 #[aoc(day1, part1)]
@@ -69,6 +70,18 @@ fn last_match<'a>(haystack: &str, words: &[&'a str]) -> &'a str {
         }
     }
     panic!("No word found in: {}", haystack);
+}
+
+#[aoc(day1, part2, aho_corasick)]
+pub fn part_2_aho_corasick(input: &str) -> u64 {
+    let ac = AhoCorasick::new(VALID_MATCHES).unwrap();
+    input.lines()
+        .map(|line| {
+            let first_digit = word_to_digit(&line[ac.find(line).unwrap().span()]);
+            let last_digit = word_to_digit(&line[ac.find_overlapping_iter(line).last().unwrap().span()]);
+            (first_digit * 10 + last_digit) as u64
+        })
+        .sum()
 }
 
 #[cfg(test)]
