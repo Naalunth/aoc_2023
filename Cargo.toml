@@ -6,6 +6,10 @@ edition = "2021"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-aho-corasick = "1.1.2"
+aho-corasick = "1"
+anyhow = "1.0.75"
 aoc-runner = "0.3"
 aoc-runner-derive = "0.3"
+btoi = "0.4.3"
+nom = "7"
+num-traits = "0.2.17"
