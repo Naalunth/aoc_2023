@@ -110,7 +110,7 @@ pub fn part_2(games: &[Game]) -> u64 {
                     g: max(acc.g, draw.g),
                     b: max(acc.b, draw.b),
                 })
-                .expect("no empty games pls");
+                .unwrap_or(Draw::default());
             r * g * b
         })
         .sum()
