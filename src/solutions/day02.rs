@@ -7,7 +7,7 @@ use Color::*;
 
 pub struct Game {
     pub id: u64,
-    pub draws: Box<[Draw]>,
+    pub draws: Vec<Draw>,
 }
 
 #[derive(Default, Copy, Clone)]
@@ -52,17 +52,13 @@ pub fn generator(input: &[u8]) -> anyhow::Result<Vec<Game>> {
 }
 
 fn parse_game(input: &[u8]) -> IResult<&[u8], Game> {
-    let (input, _) = tag(b"Game ")(input)?;
-    let (input, id) = unsigned_number::<u64>(input)?;
-    let (input, _) = tag(b": ")(input)?;
-    let (input, draws) = separated_list0(tag(b"; "), parse_draw)(input)?;
-    Ok((
-        input,
-        Game {
-            id,
-            draws: draws.into_boxed_slice(),
-        },
-    ))
+    separated_pair(
+        preceded(tag(b"Game "), unsigned_number),
+        tag(b": "),
+        separated_list0(tag(b"; "), parse_draw),
+    )
+    .map(|(id, draws)| Game { id, draws })
+    .parse(input)
 }
 
 fn parse_draw(input: &[u8]) -> IResult<&[u8], Draw> {
