@@ -9,15 +9,15 @@ use nom::{
 use num_traits::{CheckedAdd, CheckedMul, CheckedSub, FromPrimitive, Zero};
 
 pub fn unsigned_number<T>(input: &[u8]) -> IResult<&[u8], T>
-    where
-        T: FromPrimitive + Zero + CheckedAdd + CheckedMul,
+where
+    T: FromPrimitive + Zero + CheckedAdd + CheckedMul,
 {
     map_res(take_digit_bytes, |s: &[u8]| btoi::btou::<T>(s))(input)
 }
 
 pub fn signed_number<T>(input: &[u8]) -> IResult<&[u8], T>
-    where
-        T: FromPrimitive + Zero + CheckedAdd + CheckedSub + CheckedMul,
+where
+    T: FromPrimitive + Zero + CheckedAdd + CheckedSub + CheckedMul,
 {
     map_res(
         recognize(preceded(opt(alt((tag(b"-"), tag(b"+")))), take_digit_bytes)),
